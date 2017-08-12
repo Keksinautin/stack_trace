@@ -7,7 +7,7 @@ dart_task:
   - test: -p vm
   - test: -p dartium
     install_dartium: true
-  - dartanalyzer
+#  - dartanalyzer
 matrix:
   include:
     # Only validate formatting using the dev release
