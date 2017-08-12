@@ -33,17 +33,18 @@ import 'dart:io';
 void main() {
   final coverallsToken = Platform.environment['COVERALLS_TOKEN'];
   if (coverallsToken == null) {
-    print('No environment variable COVERALLS_TOKEN found.');
-    return;
+    throw new Exception('No environment variable COVERALLS_TOKEN found.');
   }
-  print('Installing dart_coveralls...');
+  print('Installing the dart_coveralls.');
+
   var result = Process.runSync('pub', ['global', 'activate', 'dart_coveralls']);
   print(result.stdout ?? result.stderr);
   if (result.exitCode != 0) {
     exitCode = 1;
     return;
   }
-  print('Running dart_coveralls...');
+
+  print('Running the dart_coveralls.');
   result = Process.runSync('pub', [
     'global',
     'run',
@@ -52,10 +53,11 @@ void main() {
     '--token=$coverallsToken',
     '--retry=2',
     '--exclude-test-files',
-    'tool/all_tests.dart',
+    'tool/all_tests2.dart',
   ]);
   print(result.stdout);
   print(result.stderr);
+
   if (result.exitCode != 0) {
     exitCode = 1;
   } else {

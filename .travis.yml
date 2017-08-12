@@ -7,30 +7,20 @@ dart_task:
   - test: -p vm
   - test: -p dartium
     install_dartium: true
-#  - dartanalyzer
 matrix:
   include:
     # Only validate formatting using the dev release
     # Formatted with 1.23.0-dev.10.0 which has (good) changes since 1.22.1
-#    - dart: dev
-#      dart_task:
-#        script:
-#          - dartfmt -l 120 -n .
-#    - dart: stable
-#      dart_task:
-#        script:
-#          - dart tool/run_coverage.dart
     # Only care about being analyzer clean for dev and stable
+    - dart: dev
+      script:
+        - dart tool/run_dartfmt.dart
     - dart: stable
       dart_task:
         dartanalyzer: --strong --fatal-warnings --fatal-infos --fatal-lints --fatal-hints --lints lib/ test/
-    - dart: dev
-      script:
-        - dartfmt -l 120 -n .
     - dart: stable
       script:
         - dart tool/run_coverage.dart
-
 cache:
   directories:
     - $HOME/.pub-cache
