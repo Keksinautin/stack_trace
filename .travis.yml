@@ -8,7 +8,7 @@ dart_task:
   - test: -p dartium
     install_dartium: true
   - dartanalyzer
-after_script: dart tool/run_coverage.dart
+#after_script: dart tool/run_coverage.dart
 matrix:
   include:
     # Only validate formatting using the dev release
@@ -17,6 +17,10 @@ matrix:
       dart_task:
         script:
           - dartfmt -l 120 -n .
+    - dart: stable
+      dart_task:
+        script:
+          - dart tool/run_coverage.dart
     # Only care about being analyzer clean for dev and stable
     - dart: dev
       dart_task:
