@@ -24,8 +24,11 @@ matrix:
     - dart: stable
       dart_task:
         dartanalyzer: --strong --fatal-warnings --fatal-infos --fatal-lints --fatal-hints --lints lib/ test/
+    - dart: dev
       script:
         - dartfmt -l 120 -n .
+    - dart: stable
+      script:
         - dart tool/run_coverage.dart
 
 cache:
