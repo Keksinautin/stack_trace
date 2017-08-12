@@ -53,7 +53,7 @@ void main() {
     '--token=$coverallsToken',
     '--retry=2',
     '--exclude-test-files',
-    'tool/all_tests2.dart',
+    'tool/all_tests.dart',
   ]);
   print(result.stdout);
   print(result.stderr);
