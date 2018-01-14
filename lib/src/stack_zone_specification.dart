@@ -7,6 +7,7 @@ import 'dart:async';
 import 'chain.dart';
 import 'lazy_chain.dart';
 import 'lazy_trace.dart';
+import 'package:stack_trace/trace_called_count.dart';
 import 'trace.dart';
 import 'utils.dart';
 
@@ -91,6 +92,9 @@ class StackZoneSpecification {
   /// with [trace], this just returns a single-trace chain containing [trace].
   Chain chainFor(StackTrace trace) {
     if (trace is Chain) return trace;
+    print(
+      '### ${++traceCalledCount} StackZoneSpecification->chainFor->StackTrace.current',
+    );
     trace ??= StackTrace.current;
 
     var previous = _chains[trace] ?? _currentNode;
@@ -222,6 +226,9 @@ class StackZoneSpecification {
   /// enabled, this only returns the innermost sub-trace.
   Trace _currentTrace([int level]) {
     level ??= 0;
+    print(
+      '### ${++traceCalledCount} StackZoneSpecification->_currentTrace->StackTrace.current',
+    );
     var stackTrace = StackTrace.current;
     return new LazyTrace(() {
       var text = _trimVMChain(stackTrace);

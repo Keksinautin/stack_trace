@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'chain.dart';
 import 'frame.dart';
 import 'lazy_trace.dart';
+import 'package:stack_trace/trace_called_count.dart';
 import 'unparsed_frame.dart';
 import 'utils.dart';
 import 'vm_trace.dart';
@@ -84,6 +85,9 @@ class Trace implements StackTrace {
           "to 0.");
     }
 
+    print(
+      '### ${++traceCalledCount} factory Trace.current->StackTrace.current',
+    );
     var trace = new Trace.from(StackTrace.current);
     return new LazyTrace(() {
       // JS includes a frame for the call to StackTrace.current, but the VM

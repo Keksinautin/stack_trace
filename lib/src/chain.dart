@@ -7,6 +7,7 @@ import 'dart:math' as math;
 
 import 'frame.dart';
 import 'lazy_chain.dart';
+import 'package:stack_trace/trace_called_count.dart';
 import 'stack_zone_specification.dart';
 import 'trace.dart';
 import 'utils.dart';
@@ -139,6 +140,9 @@ class Chain implements StackTrace {
   factory Chain.current([int level = 0]) {
     if (_currentSpec != null) return _currentSpec.currentChain(level + 1);
 
+    print(
+      '### ${++traceCalledCount} factory Chain.current->StackTrace.current',
+    );
     var chain = new Chain.forTrace(StackTrace.current);
     return new LazyChain(() {
       // JS includes a frame for the call to StackTrace.current, but the VM
