@@ -81,6 +81,7 @@ class Chain implements StackTrace {
           onError, "onError", "must be null if errorZone is false");
     }
 
+    print('### Chain.capture; when: $when');
     if (!when) {
       var newOnError;
       if (onError != null) {
@@ -96,6 +97,7 @@ class Chain implements StackTrace {
       return runZoned(callback, onError: newOnError);
     }
 
+    print('### Chain.capture->StackZoneSpecification');
     var spec = new StackZoneSpecification(onError, errorZone: errorZone);
     return runZoned(() {
       try {

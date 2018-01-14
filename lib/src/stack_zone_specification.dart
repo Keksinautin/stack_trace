@@ -83,7 +83,10 @@ class StackZoneSpecification {
   /// By default, the first frame of the first trace will be the line where
   /// [currentChain] is called. If [level] is passed, the first trace will start
   /// that many frames up instead.
-  Chain currentChain([int level = 0]) => _createNode(level + 1).toChain();
+  Chain currentChain([int level = 0]) {
+    print('### StackZoneSpecification->currentChain');
+    return _createNode(level + 1).toChain();
+  }
 
   /// Returns the stack chain associated with [trace], if one exists.
   ///
@@ -119,6 +122,7 @@ class StackZoneSpecification {
   ZoneCallback<R> _registerCallback<R>(
       Zone self, ZoneDelegate parent, Zone zone, R f()) {
     if (f == null || _disabled) return parent.registerCallback(zone, f);
+    print('### StackZoneSpecification->_registerCallback');
     var node = _createNode(1);
     return parent.registerCallback(zone, () => _run(f, node));
   }
@@ -128,6 +132,7 @@ class StackZoneSpecification {
   ZoneUnaryCallback<R, T> _registerUnaryCallback<R, T>(
       Zone self, ZoneDelegate parent, Zone zone, R f(T arg)) {
     if (f == null || _disabled) return parent.registerUnaryCallback(zone, f);
+    print('### StackZoneSpecification->_createNode');
     var node = _createNode(1);
     return parent.registerUnaryCallback(zone, (arg) {
       return _run(() => f(arg), node);
@@ -140,6 +145,7 @@ class StackZoneSpecification {
       Zone self, ZoneDelegate parent, Zone zone, Function f) {
     if (f == null || _disabled) return parent.registerBinaryCallback(zone, f);
 
+    print('### StackZoneSpecification->_registerBinaryCallback');
     var node = _createNode(1);
     return parent.registerBinaryCallback(zone, (arg1, arg2) {
       return _run(() => f(arg1, arg2), node);
@@ -182,8 +188,10 @@ class StackZoneSpecification {
 
     // Go up two levels to get through [_CustomZone.errorCallback].
     if (stackTrace == null) {
+      print('### StackZoneSpecification->_errorCallback_1');
       stackTrace = _createNode(2).toChain();
     } else {
+      print('### StackZoneSpecification->_errorCallback_2');
       if (_chains[stackTrace] == null) _chains[stackTrace] = _createNode(2);
     }
 
