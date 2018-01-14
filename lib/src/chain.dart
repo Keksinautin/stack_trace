@@ -82,6 +82,7 @@ class Chain implements StackTrace {
     }
 
     print('### Chain.capture; when: $when');
+    print(StackTrace.current);
     if (!when) {
       var newOnError;
       if (onError != null) {
