@@ -3,7 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:html';
 import 'dart:math' as math;
 
 import 'frame.dart';
@@ -82,8 +81,8 @@ class Chain implements StackTrace {
           onError, "onError", "must be null if errorZone is false");
     }
 
-    window.console.log('### Chain.capture; when: $when');
-    window.console.log(StackTrace.current);
+    print('### Chain.capture; when: $when');
+    print(StackTrace.current);
     if (!when) {
       var newOnError;
       if (onError != null) {
@@ -99,10 +98,11 @@ class Chain implements StackTrace {
       return runZoned(callback, onError: newOnError);
     }
 
-    window.console.log('### Chain.capture->StackZoneSpecification');
+    print('### Chain.capture->StackZoneSpecification');
     var spec = new StackZoneSpecification(onError, errorZone: errorZone);
     return runZoned(() {
       try {
+        print('### Chain.capture->StackZoneSpecification->callback()');
         return callback();
       } catch (error, stackTrace) {
         // TODO(nweiz): Don't special-case this when issue 19566 is fixed.
@@ -144,8 +144,9 @@ class Chain implements StackTrace {
   factory Chain.current([int level = 0]) {
     if (_currentSpec != null) return _currentSpec.currentChain(level + 1);
 
-    window.console.log(
-      '### ${++traceCalledCount} factory Chain.current->StackTrace.current',
+    ++traceCalledCount;
+    print(
+      '### $traceCalledCount factory Chain.current->StackTrace.current',
     );
     var chain = new Chain.forTrace(StackTrace.current);
     return new LazyChain(() {

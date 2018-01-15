@@ -2,7 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:html';
 import 'dart:math' as math;
 
 import 'chain.dart';
@@ -86,8 +85,9 @@ class Trace implements StackTrace {
           "to 0.");
     }
 
-    window.console.log(
-      '### ${++traceCalledCount} factory Trace.current->StackTrace.current',
+    ++traceCalledCount;
+    print(
+      '### $traceCalledCount factory Trace.current->StackTrace.current',
     );
     var trace = new Trace.from(StackTrace.current);
     return new LazyTrace(() {

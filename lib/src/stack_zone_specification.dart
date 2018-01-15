@@ -3,7 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:html';
 
 import 'chain.dart';
 import 'lazy_chain.dart';
@@ -68,7 +67,7 @@ class StackZoneSpecification {
 
   StackZoneSpecification(this._onError, {bool errorZone: true})
       : _errorZone = errorZone {
-    window.console.log('### StackZoneSpecification.constructor');
+    print('### StackZoneSpecification.constructor');
   }
 
   /// Converts [this] to a real [ZoneSpecification].
@@ -87,7 +86,7 @@ class StackZoneSpecification {
   /// [currentChain] is called. If [level] is passed, the first trace will start
   /// that many frames up instead.
   Chain currentChain([int level = 0]) {
-    window.console.log('### StackZoneSpecification->currentChain');
+    print('### StackZoneSpecification->currentChain');
     return _createNode(level + 1).toChain();
   }
 
@@ -98,8 +97,9 @@ class StackZoneSpecification {
   /// with [trace], this just returns a single-trace chain containing [trace].
   Chain chainFor(StackTrace trace) {
     if (trace is Chain) return trace;
-    window.console.log(
-      '### ${++traceCalledCount} StackZoneSpecification->chainFor->StackTrace.current',
+    ++traceCalledCount;
+    print(
+      '### $traceCalledCount StackZoneSpecification->chainFor->StackTrace.current',
     );
     trace ??= StackTrace.current;
 
@@ -125,7 +125,7 @@ class StackZoneSpecification {
   ZoneCallback<R> _registerCallback<R>(
       Zone self, ZoneDelegate parent, Zone zone, R f()) {
     if (f == null || _disabled) return parent.registerCallback(zone, f);
-    window.console.log('### StackZoneSpecification->_registerCallback');
+    print('### StackZoneSpecification->_registerCallback');
     var node = _createNode(1);
     return parent.registerCallback(zone, () => _run(f, node));
   }
@@ -135,7 +135,7 @@ class StackZoneSpecification {
   ZoneUnaryCallback<R, T> _registerUnaryCallback<R, T>(
       Zone self, ZoneDelegate parent, Zone zone, R f(T arg)) {
     if (f == null || _disabled) return parent.registerUnaryCallback(zone, f);
-    window.console.log('### StackZoneSpecification->_createNode');
+    print('### StackZoneSpecification->_createNode');
     var node = _createNode(1);
     return parent.registerUnaryCallback(zone, (arg) {
       return _run(() => f(arg), node);
@@ -148,7 +148,7 @@ class StackZoneSpecification {
       Zone self, ZoneDelegate parent, Zone zone, Function f) {
     if (f == null || _disabled) return parent.registerBinaryCallback(zone, f);
 
-    window.console.log('### StackZoneSpecification->_registerBinaryCallback');
+    print('### StackZoneSpecification->_registerBinaryCallback');
     var node = _createNode(1);
     return parent.registerBinaryCallback(zone, (arg1, arg2) {
       return _run(() => f(arg1, arg2), node);
@@ -191,10 +191,10 @@ class StackZoneSpecification {
 
     // Go up two levels to get through [_CustomZone.errorCallback].
     if (stackTrace == null) {
-      window.console.log('### StackZoneSpecification->_errorCallback_1');
+      print('### StackZoneSpecification->_errorCallback_1');
       stackTrace = _createNode(2).toChain();
     } else {
-      window.console.log('### StackZoneSpecification->_errorCallback_2');
+      print('### StackZoneSpecification->_errorCallback_2');
       if (_chains[stackTrace] == null) _chains[stackTrace] = _createNode(2);
     }
 
@@ -237,8 +237,9 @@ class StackZoneSpecification {
   /// enabled, this only returns the innermost sub-trace.
   Trace _currentTrace([int level]) {
     level ??= 0;
-    window.console.log(
-      '### ${++traceCalledCount} StackZoneSpecification->_currentTrace->StackTrace.current',
+    ++traceCalledCount;
+    print(
+      '### $traceCalledCount StackZoneSpecification->_currentTrace->StackTrace.current',
     );
     var stackTrace = StackTrace.current;
     return new LazyTrace(() {
