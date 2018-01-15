@@ -96,6 +96,7 @@ class StackZoneSpecification {
   /// (converted to a [Trace] if necessary). If there is no chain associated
   /// with [trace], this just returns a single-trace chain containing [trace].
   Chain chainFor(StackTrace trace) {
+    print('### StackZoneSpecification->chainFor');
     if (trace is Chain) return trace;
     ++traceCalledCount;
     print(
@@ -124,8 +125,9 @@ class StackZoneSpecification {
   /// [f] is run.
   ZoneCallback<R> _registerCallback<R>(
       Zone self, ZoneDelegate parent, Zone zone, R f()) {
-    if (f == null || _disabled) return parent.registerCallback(zone, f);
     print('### StackZoneSpecification->_registerCallback');
+    if (f == null || _disabled) return parent.registerCallback(zone, f);
+    print('### StackZoneSpecification->_registerCallback->_createNode');
     var node = _createNode(1);
     return parent.registerCallback(zone, () => _run(f, node));
   }
@@ -134,8 +136,9 @@ class StackZoneSpecification {
   /// [f] is run.
   ZoneUnaryCallback<R, T> _registerUnaryCallback<R, T>(
       Zone self, ZoneDelegate parent, Zone zone, R f(T arg)) {
+    print('### StackZoneSpecification->_registerUnaryCallback');
     if (f == null || _disabled) return parent.registerUnaryCallback(zone, f);
-    print('### StackZoneSpecification->_createNode');
+    print('### StackZoneSpecification->_registerUnaryCallback->_createNode');
     var node = _createNode(1);
     return parent.registerUnaryCallback(zone, (arg) {
       return _run(() => f(arg), node);
@@ -146,9 +149,10 @@ class StackZoneSpecification {
   /// [f] is run.
   ZoneBinaryCallback<R, T1, T2> _registerBinaryCallback<R, T1, T2>(
       Zone self, ZoneDelegate parent, Zone zone, Function f) {
+    print('### StackZoneSpecification->_registerBinaryCallback');
     if (f == null || _disabled) return parent.registerBinaryCallback(zone, f);
 
-    print('### StackZoneSpecification->_registerBinaryCallback');
+    print('### StackZoneSpecification->_registerBinaryCallback->_createNode');
     var node = _createNode(1);
     return parent.registerBinaryCallback(zone, (arg1, arg2) {
       return _run(() => f(arg1, arg2), node);
@@ -187,6 +191,7 @@ class StackZoneSpecification {
   /// necessary.
   AsyncError _errorCallback(Zone self, ZoneDelegate parent, Zone zone,
       Object error, StackTrace stackTrace) {
+    print('### StackZoneSpecification->_errorCallback');
     if (_disabled) return parent.errorCallback(zone, error, stackTrace);
 
     // Go up two levels to get through [_CustomZone.errorCallback].
