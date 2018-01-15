@@ -145,9 +145,7 @@ class Chain implements StackTrace {
     if (_currentSpec != null) return _currentSpec.currentChain(level + 1);
 
     ++traceCalledCount;
-    print(
-      '### $traceCalledCount factory Chain.current->StackTrace.current',
-    );
+    print('### $traceCalledCount factory Chain.current->StackTrace.current');
     var chain = new Chain.forTrace(StackTrace.current);
     return new LazyChain(() {
       // JS includes a frame for the call to StackTrace.current, but the VM

@@ -86,9 +86,7 @@ class Trace implements StackTrace {
     }
 
     ++traceCalledCount;
-    print(
-      '### $traceCalledCount factory Trace.current->StackTrace.current',
-    );
+    print('### $traceCalledCount factory Trace.current->StackTrace.current');
     var trace = new Trace.from(StackTrace.current);
     return new LazyTrace(() {
       // JS includes a frame for the call to StackTrace.current, but the VM
